@@ -1,7 +1,10 @@
 import discord
-import requests
+import requests, os
+from dotenv import load_dotenv
 from discord.ext import tasks
 
+load_dotenv()
+TOKEN = os.environ['DISCORD_TOKEN']
 
 def getCryptoPrices():
     URL = 'https://api.coingecko.com/api/v3/simple/price?ids=jumptoken&vs_currencies=inr%2Cusd'
@@ -11,14 +14,14 @@ def getCryptoPrices():
     return data
 
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 
 
 @client.event
 async def on_ready():
     print(f'Logged In')
     channel = discord.utils.get(client.get_all_channels(), name='test')
-    # await client.get_channel(channel.id).send('Bot is now Online!')
+    await client.get_channel(channel.id).send('Bot is now Online!')
     return channel
 
 @client.event
@@ -27,6 +30,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('hi'):
+        printf('hi')
         await message.channel.send('hey')
 
     # if message.content.startswith('tell'):
@@ -35,19 +39,19 @@ async def on_message(message):
     #     await message.channel.send(embed=embed)
 
 
-@tasks.loop(seconds=5)
-async def autosend():
-    # channel = discord.utils.get(client.get_all_channels(), name='test')
-    channel = client.get_channel(849994742150594571)
-    embed = discord.Embed(title="JumpToken Now", url="https://www.coingecko.com/en/coins/jumptoken",
-                          description=f'{getCryptoPrices()}')
-    await channel.send(embed=embed)
+#@tasks.loop(seconds=5)
+#async def autosend():
+#    # channel = discord.utils.get(client.get_all_channels(), name='test')
+#    channel = client.get_channel(849994742150594571)
+#    embed = discord.Embed(title="JumpToken Now", url="https://www.coingecko.com/en/coins/jumptoken",
+#                          description=f'{getCryptoPrices()}')
+#    await channel.send(embed=embed)
 
 # @my_background_task.before_loop
 
 
-async def my_background_task_before_loop():
-    await client.wait_until_ready()
+#async def my_background_task_before_loop():
+ #   await client.wait_until_ready()
 
-autosend.start()
+#autosend.start()
 client.run(TOKEN)
