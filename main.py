@@ -57,7 +57,10 @@ async def on_message(message):
         )
         embed.set_thumbnail(url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png")
         await message.channel.send(embed=embed)
-
+    elif message.content.startswith("ping"):
+        #await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
+        embed = discord.Embed(title="Pong 🏓", description = f"Latency : {round(client.latency * 1000)}ms", color = 0x10b900)
+        await message.channel.send(embed=embed)
 
 # @tasks.loop(seconds=5)
 # async def autosend():
