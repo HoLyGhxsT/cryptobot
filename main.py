@@ -1,73 +1,76 @@
-import discord
-import requests, os
 from dotenv import load_dotenv
-from discord.ext import tasks
+import discord, requests, os, logging
+
+# from discord.ext import commands
 
 load_dotenv()
-TOKEN = os.environ['DISCORD_TOKEN']
-GUILD = os.environ['GUILD']
+TOKEN = os.environ["DISCORD_TOKEN"]
+GUILD = os.environ["GUILD"]
+
 
 def getCryptoPrices():
-    URL = 'https://api.coingecko.com/api/v3/simple/price?ids=jumptoken&vs_currencies=inr%2Cusd'
+    URL = "https://api.coingecko.com/api/v3/simple/price?ids=jumptoken&vs_currencies=inr%2Cusd"
     r = requests.get(url=URL)
     data = r.json()
-    # print(data)
-    return data
+    inr = data["jumptoken"]["inr"]
+    usd = data["jumptoken"]["usd"]
+    print(data)
+    return data, inr, usd
+    #return [data,inr,usd]
 
 
-client = discord.Client(intents=discord.Intents.default())
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+client = discord.Client(intents=intents)
+
+# client = commands.Bot(command_prefix="?", intents=intents)
 
 
 @client.event
 async def on_ready():
-    print(f'Logged In')
-    channel = discord.utils.get(client.get_all_channels(), name='test')
-    #await client.get_channel(channel.id).send('Bot is now Online!')
-    #return channel
-    
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
-    #members = '\n - '.join([member.name for member in guild.members])
-    #print(f'Guild Members:\n - {members}')
+    print(f"Logged in as {client.user} (ID: {client.user.id})")
+    channel = discord.utils.get(client.get_all_channels(), name="test")
+    # await client.get_channel(channel.id).send('Bot is now Online!')
+    # return channel
+    print("--------------------------------------------------")
+
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content == 'hey':
-        print('hey')
-        await message.channel.send('hola')
-    elif message.content == 'raise-exception':
-        raise discord.DiscordException
-    
-    #    if message.content.startswith('hi'):
-#        await message.channel.send('hey')
+    print(f"Message from {message.author}: {message.content}")
 
-# if message.content.startswith('tell'):
-    #     embed = discord.Embed(title="JumpToken Now", url="https://www.coingecko.com/en/coins/jumptoken",
-    #                           description=f'{getCryptoPrices()}')
-    #     await message.channel.send(embed=embed)
+    if message.content.startswith("$hello"):
+        await message.channel.send("Hello!")
+    elif message.content.startswith("jmpt"):
+        await message.channel.send(getCryptoPrices())
+    elif message.content.startswith("tell"):
+        data, inr, usd = getCryptoPrices()
+        #dat = getCryptoPrices()
+        embed = discord.Embed(
+            title="JumpToken Price Now",
+            url="https://www.coingecko.com/en/coins/jumptoken",
+            description=f"1 JMPT in INR {inr}₹\n 1 JMPT in USD {usd}$",
+        )
+        embed.set_thumbnail(url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png")
+        await message.channel.send(embed=embed)
+    elif message.content.startswith("ping"):
+        #await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
+        embed = discord.Embed(title="Pong 🏓", description = f"Latency : {round(client.latency * 1000)}ms", color = 0x10b900)
+        await message.channel.send(embed=embed)
 
-
-#@tasks.loop(seconds=5)
-#async def autosend():
+# @tasks.loop(seconds=5)
+# async def autosend():
 #    # channel = discord.utils.get(client.get_all_channels(), name='test')
 #    channel = client.get_channel(849994742150594571)
 #    embed = discord.Embed(title="JumpToken Now", url="https://www.coingecko.com/en/coins/jumptoken",
 #                          description=f'{getCryptoPrices()}')
 #    await channel.send(embed=embed)
 
-# @my_background_task.before_loop
 
-
-#async def my_background_task_before_loop():
- #   await client.wait_until_ready()
-
-#autosend.start()
+handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
+# client.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
 client.run(TOKEN)
