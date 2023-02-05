@@ -45,9 +45,9 @@ async def on_message(message):
 
     if message.content.startswith("$hello"):
         await message.channel.send("Hello!")
-    elif message.content.startswith("jmpt"):
+    elif message.content.startswith("jmptplain"):
         await message.channel.send(getCryptoPrices())
-    elif message.content.startswith("tell"):
+    elif message.content.startswith("jmpt"):
         data, inr, usd = getCryptoPrices()
         #dat = getCryptoPrices()
         embed = discord.Embed(
