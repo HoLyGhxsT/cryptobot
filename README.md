@@ -1,3 +1,3 @@
 # cryptobot
 ---
-A simple discord bot for alerting JMPT Token value
+A simple discord bot for alerting JMPT Token Market value
