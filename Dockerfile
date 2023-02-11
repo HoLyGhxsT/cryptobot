@@ -1,5 +1,5 @@
 FROM python:3
-FROM gorialis/discord.py
+# FROM gorialis/discord.py
 
 RUN mkdir -p /usr/src/bot
 
