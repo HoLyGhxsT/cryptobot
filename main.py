@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import discord, requests, os, logging
+import alive
 from discord.ext import tasks
 from datetime import datetime
 
@@ -116,4 +117,5 @@ def write_to_log():
 
 handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
 # client.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
+alive.alive()
 client.run(TOKEN)

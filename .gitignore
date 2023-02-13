@@ -3,3 +3,4 @@ discord.log
 env
 test.py
 run.log
+__pycache__/
