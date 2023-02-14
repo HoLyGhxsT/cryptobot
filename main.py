@@ -47,35 +47,79 @@ async def on_message(message):
 
     print(f"Message from {message.author}: {message.content}")
 
-    if message.content.startswith("$hello"):
-        await message.channel.send("Hello!")
-    elif message.content.startswith("jmptplain"):
-        await message.channel.send(getCryptoPrices())
-    elif message.content.startswith("jmpt"):
-        # data, inr, usd = getCryptoPrices()
-        dat = getCryptoPrices()
-        embed = discord.Embed(
-            title="JumpToken Price Now",
-            url="https://www.coingecko.com/en/coins/jumptoken",
-            # description=f"1 JMPT in INR {inr}₹\n 1 JMPT in USD {usd}$",
-            description=f"1 JMPT in INR {dat[1]}₹\n 1 JMPT in USD {dat[2]}$",
-            timestamp=datetime.now()
-        )
-        embed.set_thumbnail(
-            url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
-        )
-        await message.channel.send(embed=embed)
-    elif message.content.startswith("ping"):
-        # await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
-        embed = discord.Embed(
-            title="Pong 🏓",
-            description=f"Latency : {round(client.latency * 1000)}ms",
-            color=0x10B900,
-        )
-        await message.channel.send(embed=embed)
-    elif message.content.startswith("help"):
-        embed = discord.Embed(title="Help 😣", description=f" Ping \n jmpt \n jmptplain")
-        await message.channel.send(embed=embed)
+    # if message.content.startswith("$hello"):
+    #     await message.channel.send("Hello!")
+    # elif message.content.startswith("jmptplain"):
+    #     await message.channel.send(getCryptoPrices())
+    # elif message.content.startswith("jmpt"):
+    # data, inr, usd = getCryptoPrices()
+    # dat = getCryptoPrices()
+    # embed = discord.Embed(
+    #     title="JumpToken Price Now",
+    #     url="https://www.coingecko.com/en/coins/jumptoken",
+    #     # description=f"1 JMPT in INR {inr}₹\n 1 JMPT in USD {usd}$",
+    #     description=f"1 JMPT in INR {dat[1]}₹\n 1 JMPT in USD {dat[2]}$",
+    #     timestamp=datetime.now()
+    # )
+    # embed.set_thumbnail(
+    #     url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
+    # )
+    # await message.channel.send(embed=embed)
+    # elif message.content.startswith("ping"):
+    #     # await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
+    #     embed = discord.Embed(
+    #         title="Pong 🏓",
+    #         description=f"Latency : {round(client.latency * 1000)}ms",
+    #         color=0x10B900,
+    #     )
+    #     await message.channel.send(embed=embed)
+    # elif message.content.startswith("help"):
+    #     embed = discord.Embed(title="Help 😣", description=f" Ping \n jmpt \n jmptplain")
+    #     await message.channel.send(embed=embed)
+
+    command = message.content
+
+    match str(command):
+        case "hello":
+            await message.channel.send("Hello!")
+        case "jmpt":
+            # data, inr, usd = getCryptoPrices()
+            dat = getCryptoPrices()
+            embed = discord.Embed(
+                title="JumpToken Price Now",
+                url="https://www.coingecko.com/en/coins/jumptoken",
+                # description=f"1 JMPT in INR {inr}₹\n 1 JMPT in USD {usd}$",
+                description=f"1 JMPT in INR {dat[1]}₹\n 1 JMPT in USD {dat[2]}$",
+                timestamp=datetime.now(),
+            )
+            embed.set_thumbnail(
+                url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
+            )
+            await message.channel.send(embed=embed)
+        case "ping":
+            # await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
+            embed = discord.Embed(
+                title="Pong 🏓",
+                description=f"Latency : {round(client.latency * 1000)}ms",
+                color=0x10B900,
+            )
+            await message.channel.send(embed=embed)
+        case "help":
+            embed = discord.Embed(title="Help 😣", description=f" Ping \n jmpt \n jmptplain")
+            await message.channel.send(embed=embed)
+        case "jmptplain":
+            dat = getCryptoPrices()
+            embed = discord.Embed(
+                title="JMPT Plain json",
+                description=f"fetched data {dat[0]}",
+                timestamp=datetime.now(),
+            )
+            # embed.set_image(url=message.author.avatar_url)
+            embed.set_thumbnail(url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png")
+            # embed.set_footer(icon_url=client.user.avatar.url)
+            await message.channel.send(embed=embed)
+        case _:
+            return
 
 
 @tasks.loop(hours=1)
@@ -86,7 +130,7 @@ async def auto_send():
         title="JumpToken Price Now",
         url="https://www.coingecko.com/en/coins/jumptoken",
         description=f"1 JMPT in INR {dat[1]}₹\n 1 JMPT in USD {dat[2]}$",
-        timestamp=datetime.now()
+        timestamp=datetime.now(),
     )
     embedauto.set_thumbnail(
         url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
