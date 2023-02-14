@@ -1,4 +1,4 @@
-FROM python:3.9-bullseye
+FROM python:3.10-bullseye
 # FROM gorialis/discord.py
 
 RUN mkdir -p /usr/src/bot
