@@ -77,11 +77,11 @@ async def on_message(message):
     #     embed = discord.Embed(title="Help 😣", description=f" Ping \n jmpt \n jmptplain")
     #     await message.channel.send(embed=embed)
 
-    command = message.content
+    command = message.content.lower()
 
     match str(command):
         case "hello":
-            await message.channel.send("Hello!")
+            return await message.channel.send("Hello!")
         case "jmpt":
             # data, inr, usd = getCryptoPrices()
             dat = getCryptoPrices()
@@ -95,7 +95,7 @@ async def on_message(message):
             embed.set_thumbnail(
                 url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
             )
-            await message.channel.send(embed=embed)
+            return await message.channel.send(embed=embed)
         case "ping":
             # await message.channel.send('Pong! {0}'.format(round(client.latency, 1)))
             embed = discord.Embed(
@@ -103,10 +103,12 @@ async def on_message(message):
                 description=f"Latency : {round(client.latency * 1000)}ms",
                 color=0x10B900,
             )
-            await message.channel.send(embed=embed)
+            return await message.channel.send(embed=embed)
         case "help":
-            embed = discord.Embed(title="Help 😣", description=f" Ping \n jmpt \n jmptplain")
-            await message.channel.send(embed=embed)
+            embed = discord.Embed(
+                title="Help 😣", description=f" Ping \n jmpt \n jmptplain"
+            )
+            return await message.channel.send(embed=embed)
         case "jmptplain":
             dat = getCryptoPrices()
             embed = discord.Embed(
@@ -115,9 +117,11 @@ async def on_message(message):
                 timestamp=datetime.now(),
             )
             # embed.set_image(url=message.author.avatar_url)
-            embed.set_thumbnail(url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png")
+            embed.set_thumbnail(
+                url="https://s2.coinmarketcap.com/static/img/coins/200x200/17334.png"
+            )
             # embed.set_footer(icon_url=client.user.avatar.url)
-            await message.channel.send(embed=embed)
+            return await message.channel.send(embed=embed)
         case _:
             return
 
