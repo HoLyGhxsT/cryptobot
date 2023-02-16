@@ -8,7 +8,7 @@ load_dotenv()
 TOKEN = os.environ["DISCORD_TOKEN"]
 GUILD = os.environ["GUILD"]
 CHANNEL = os.environ["CHANNEL"]
-
+TRIGGER = os.environ["TRIGGER"]
 
 def getCryptoPrices():
     URL = "https://api.coingecko.com/api/v3/simple/price?ids=jumptoken&vs_currencies=inr%2Cusd"
@@ -36,8 +36,9 @@ async def on_ready():
     # await client.get_channel(channel.id).send('Bot is now Online!')
     # return channel
     print("--------------------------------------------------")
-    # auto_send.start()
-    # print("Auto send data initialized. Sends data every hours starting now...")
+    if(TRIGGER == "True"):
+        auto_send.start()
+        print("Auto send data initialized. Sends data every hours starting now...")
 
 
 @client.event
